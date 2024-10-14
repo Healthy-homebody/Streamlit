@@ -16,8 +16,16 @@ st.set_page_config(
     page_icon=icon_path
 )
 
+# 세션 상태에서 선택된 페이지를 저장할 수 있도록 초기화
+if 'selected_page' not in st.session_state:
+    st.session_state.selected_page = "main"
+
 # 사이드바에서 페이지 선택
-page = st.sidebar.selectbox("페이지를 선택하세요", ["main", "page1", "page2", "page3"])
+page = st.sidebar.selectbox(
+    "페이지를 선택하세요", 
+    ["main", "page1", "page2", "page3"],
+    index=["main", "page1", "page2", "page3"].index(st.session_state.selected_page)  # 세션 상태에 따라 페이지 선택
+)
 
 # 조건부 렌더링을 통해 각 페이지 파일을 불러옴
 if page == "main":
@@ -32,20 +40,22 @@ if page == "main":
     with col1:
         if st.button("기본 필라테스"):
             st.session_state.selected_action = "기본 필라테스"
+            st.session_state.selected_page = "page1" 
 
         if st.button("상체 필라테스"):
             st.session_state.selected_action = "상체 필라테스"
+            st.session_state.selected_page = "page1" 
 
     with col2:
         if st.button("하체 필라테스"):
             st.session_state.selected_action = "하체 필라테스"
+            st.session_state.selected_page = "page1" 
 
         if st.button("전신 필라테스"):
             st.session_state.selected_action = "전신 필라테스"
+            st.session_state.selected_page = "page1" 
 
-
-# 조건부 렌더링을 통해 각 페이지 파일을 불러옴
-if page == "page1":
+elif page == "page1":
     page1.show()
 elif page == "page2":
     page2.show()

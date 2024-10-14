@@ -1,19 +1,31 @@
 # 동작 비교 페이지 (page3)
 import streamlit as st
-import os
 
 def show():
     st.title("동작 비교 페이지")
     st.write("여기는 동작 비교 페이지입니다.")
-    
-    # 동영상 절대 경로 설정
-    video_path = os.path.join(os.path.dirname(__file__), '../src/mp4/video2.mp4')
 
-    # 동영상 경로 확인
-    if os.path.exists(video_path):
-        # 파일을 바이너리로 읽어서 스트림릿에서 재생
-        with open(video_path, 'rb') as video_file:
-            video_bytes = video_file.read()
-            st.video(video_bytes, format="video/mp4")
+    col1, col2 = st.columns(2)  # 두 개의 열로 나누기
+
+    # page1에서 저장한 동영상 가져오기
+    if 'page1_video' in st.session_state:
+        with col1:
+            st.subheader("동작 설명 비디오")
+            st.video(st.session_state.page1_video)  # page1에서 비디오 재생
     else:
-        st.error(f"동영상을 찾을 수 없습니다: {video_path}")
+        with col1:
+            st.subheader("동작 설명 비디오")
+            st.write("비디오가 없습니다.")
+
+    # 세션 상태에서 업로드한 동영상 가져오기
+    if 'uploaded_video' in st.session_state:
+        with col2:
+            st.subheader("사용자 업로드 비디오")
+            st.video(st.session_state.uploaded_video)  # 업로드된 비디오 재생
+    else:
+        with col2:
+            st.subheader("사용자 업로드 비디오")
+            st.write("업로드된 동영상이 없습니다.")
+
+    if st.button("완료", key="finish"):
+        st.session_state.selected_page = "main"  # 완료 버튼 클릭 시 main 페이지로 이동
