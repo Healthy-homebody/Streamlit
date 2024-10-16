@@ -22,7 +22,7 @@ def show():
         "기본 필라테스": {
             "title" : "기본 필라테스",
             "description": "기본 필라테스 동작입니다. 기초를 다지는 데 도움을 줍니다.",
-            "video_path": os.path.join(os.path.dirname(__file__), '../src/mp4/video2.mp4')  # 기본 필라테스 동영상 경로
+            "video_path": os.path.join(os.path.dirname(__file__), '../src/mp4/video1.mp4')  # 기본 필라테스 동영상 경로
         },
         "상체 필라테스": {
             "title" : "상체 필라테스",
@@ -32,12 +32,12 @@ def show():
         "하체 필라테스": {
             "title" : "하체 필라테스",
             "description": "하체를 강화하는 동작입니다.",
-            "video_path": os.path.join(os.path.dirname(__file__), '../src/mp4/video2.mp4'),  # 하체 필라테스 동영상 경로
+            "video_path": os.path.join(os.path.dirname(__file__), '../src/mp4/video3.mp4'),  # 하체 필라테스 동영상 경로
         },
         "전신 필라테스": {
             "title" : "전신 필라테스",
             "description": "전신을 아우르는 동작입니다.",
-            "video_path": os.path.join(os.path.dirname(__file__), '../src/mp4/video2.mp4')  # 전신 필라테스 동영상 경로
+            "video_path": os.path.join(os.path.dirname(__file__), '../src/mp4/video4.mp4')  # 전신 필라테스 동영상 경로
         }
     }
     
