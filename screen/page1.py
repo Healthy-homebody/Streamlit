@@ -32,7 +32,7 @@ def show():
         "하체 필라테스": {
             "title" : "하체 필라테스",
             "description": "하체를 강화하는 동작입니다.",
-            "video_path": os.path.join(os.path.dirname(__file__), '../src/mp4/video3.mp4'),  # 하체 필라테스 동영상 경로
+            "video_path": os.path.join(os.path.dirname(__file__), '../src/mp4/video3.mp4')  # 하체 필라테스 동영상 경로
         },
         "전신 필라테스": {
             "title" : "전신 필라테스",
@@ -42,9 +42,8 @@ def show():
     }
     
     selected_action = st.session_state.selected_action
-    st.write(action_info[selected_action]["title"])  
+    st.write(action_info[selected_action]["title"])
 
-    
     # 동영상 경로 확인
     video_path = action_info[selected_action]["video_path"]
     if os.path.exists(video_path):
@@ -57,11 +56,13 @@ def show():
 
     col1, col2 = st.columns([1, 1])  
     with col1:
-        if st.button("이전", key="previous"):
+        # 각 버튼에 고유한 key 값을 할당
+        if st.button("이전", key="previous_button"):
             st.session_state.selected_page = "main"  # 이전 버튼 클릭 시 main 페이지로 이동
 
     with col2:
-        if st.button("다음", key="next"):
+        # 각 버튼에 고유한 key 값을 할당
+        if st.button("다음", key="next_button"):
             st.session_state.selected_page = "page2"  # 다음 버튼 클릭 시 page2로 이동
 
-    st.write(action_info[selected_action]["description"])  
+    st.write(action_info[selected_action]["description"])
