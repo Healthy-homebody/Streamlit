@@ -147,7 +147,7 @@ def show():
 
     col1, col2 = st.columns([1, 1])  
     with col1:
-        if st.button("이전", key="previous_button"):
+        if st.button("목록", key="previous_button"):
             st.session_state.selected_page = "main"
 
     with col2:
