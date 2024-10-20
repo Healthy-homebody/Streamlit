@@ -33,26 +33,26 @@ if page == "main":
     st.write("필라테스 동작을 선택해주세요")
 
     # 필라테스 동작 버튼 리스트
-    actions = ["기본 필라테스", "상체 필라테스", "하체 필라테스", "전신 필라테스"]
+    actions = ["로우 런지(Low Lunge)", "파르브리타 자누 시르사아사나(Revolved Head-to-Knee Pose)", "선 활 자세(Standing Split)", "런지 사이트 스트레칭(Lunging Side Stretch)"]
 
     # 각 동작에 대한 버튼 생성
     col1, col2 = st.columns(2)  # 버튼을 두 개의 열로 나눠서 보여주기
     with col1:
-        if st.button("기본 필라테스"):
-            st.session_state.selected_action = "기본 필라테스"
+        if st.button("로우 런지(Low Lunge)"):
+            st.session_state.selected_action = "로우 런지(Low Lunge)"
             st.session_state.selected_page = "page1" 
 
-        if st.button("상체 필라테스"):
-            st.session_state.selected_action = "상체 필라테스"
+        if st.button("파르브리타 자누 시르사아사나(Revolved Head-to-Knee Pose)"):
+            st.session_state.selected_action = "파르브리타 자누 시르사아사나(Revolved Head-to-Knee Pose)"
             st.session_state.selected_page = "page1" 
 
     with col2:
-        if st.button("하체 필라테스"):
-            st.session_state.selected_action = "하체 필라테스"
+        if st.button("선 활 자세(Standing Split)"):
+            st.session_state.selected_action = "선 활 자세(Standing Split)"
             st.session_state.selected_page = "page1" 
 
-        if st.button("전신 필라테스"):
-            st.session_state.selected_action = "전신 필라테스"
+        if st.button("런지 사이트 스트레칭(Lunging Side Stretch)"):
+            st.session_state.selected_action = "런지 사이트 스트레칭(Lunging Side Stretch)"
             st.session_state.selected_page = "page1" 
 
 elif page == "page1":

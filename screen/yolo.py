@@ -8,30 +8,16 @@ import cv2
 # pip install numpy
 
 
-# YOLO 모델 초기화
-model = YOLO("../models/yolov8m-pose.pt")  # yolov8m 모델 경로에 맞게 수정
+# # YOLO 모델 초기화
+# model = YOLO("../models/yolov8m-pose.pt")  # yolov8m 모델 경로에 맞게 수정
 
 def process_frame(frame):
     """
     비디오 프레임에 YOLO 모델 적용
     """
-    # 모델을 사용하여 추론
-    results = model(frame)
-    result = results[0]
-
-    # 경계 상자와 키 포인트 그리기
-    frame = draw_boxes(result, frame)
-    frame = draw_keypoints(result, frame)
-    return frame
-
-def draw_boxes(result, frame):
-    """
-    경계 상자 그리기 함수
-    """
-    for boxes in result.boxes:
-        x1, y1, x2, y2, score, cls = boxes.data.squeeze().cpu().numpy()
-        cv2.rectangle(frame, (int(x1), int(y1)), (int(x2), int(y2)), (0, 255, 0), 2)
-    return frame
+    # # 모델을 사용하여 추론
+    # results = model(frame)
+    # result = results[0]
 
 def draw_keypoints(result, frame):
     """

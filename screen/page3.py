@@ -43,17 +43,28 @@ def show():
     st.write("여기는 동작 비교 페이지입니다.")
 
     # 동작 설명 비디오 처리
-    if 'page1_video' in st.session_state:
+    if 'selected_action' in st.session_state:
         st.subheader("동작 설명 비디오")
-        video_path = save_uploaded_file(st.session_state.page1_video)
+        # video_path = save_uploaded_file(st.session_state.page1_video)
 
-        # YOLO 처리된 비디오 파일을 임시로 저장
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as temp_video_file:
-            yolo_output_path = temp_video_file.name
-            process_video_to_file(video_path, yolo_output_path)  # YOLO 처리된 비디오 저장
+        # # YOLO 처리된 비디오 파일을 임시로 저장
+        # with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as temp_video_file:
+        #     yolo_output_path = temp_video_file.name
+        #     process_video_to_file(video_path, yolo_output_path)  # YOLO 처리된 비디오 저장
             
-            # YOLO 처리된 비디오 재생
-            st.video(yolo_output_path)
+        #     # YOLO 처리된 비디오 재생
+        #     st.video(yolo_output_path)
+        action_info = {
+            "로우 런지(Low Lunge)": '../src/mp4/video1.mp4',
+            "파르브리타 자누 시르사아사나(Revolved Head-to-Knee Pose)": '../src/mp4/video6.mp4',
+            "선 활 자세(Standing Split)": '../src/mp4/video3.mp4',
+            "런지 사이트 스트레칭(Lunging Side Stretch)": '../src/mp4/video4.mp4'
+        }
+        video_path = os.path.join(os.path.dirname(__file__), action_info[st.session_state.selected_action])
+        if os.path.exists(video_path):
+            st.video(video_path)
+        else:
+            st.write("비디오 파일을 찾을 수 없습니다.")
     else:
         st.subheader("동작 설명 비디오")
         st.write("비디오가 없습니다.")
@@ -61,15 +72,16 @@ def show():
     # 사용자 업로드 비디오 처리
     if 'uploaded_video' in st.session_state:
         st.subheader("사용자 업로드 비디오")
-        uploaded_video_path = save_uploaded_file(st.session_state.uploaded_video)
+        st.video(st.session_state.uploaded_video)
+        # uploaded_video_path = save_uploaded_file(st.session_state.uploaded_video)
 
-        # YOLO 처리된 비디오 파일을 임시로 저장
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as temp_video_file:
-            yolo_output_path = temp_video_file.name
-            process_video_to_file(uploaded_video_path, yolo_output_path)  # YOLO 처리된 비디오 저장
+        # # YOLO 처리된 비디오 파일을 임시로 저장
+        # with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as temp_video_file:
+        #     yolo_output_path = temp_video_file.name
+        #     process_video_to_file(uploaded_video_path, yolo_output_path)  # YOLO 처리된 비디오 저장
             
-            # YOLO 처리된 비디오 재생
-            st.video(yolo_output_path)
+        #     # YOLO 처리된 비디오 재생
+        #     st.video(yolo_output_path)
     else:
         st.subheader("사용자 업로드 비디오")
         st.write("업로드된 동영상이 없습니다.")
