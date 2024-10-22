@@ -3,7 +3,7 @@
 이 프로젝트는 운동 동작 설명 페이지를 제공하는 웹 애플리케이션입니다.  
 사용자는 다양한 운동 동작에 대한 설명과 관련 동영상을 시청할 수 있습니다. 또한, **Yolov8** 모델을 사용하여 실시간 객체 탐지 기능을 통합하고,  
 **DTW (Dynamic Time Warping)** 알고리즘을 활용하여  
-운동 동작의 유사성을 분석합니다.  
+운동 동작의 유사성을 분석합니다.
 
 ---
 
@@ -22,26 +22,27 @@
 📂 project_directory/
 
 ├── 📂 models/
-│ ├── [📄DTWEX.py]
-│ ├── [📄Yolov8.py]
+│    ├── __init__.py
+│    ├── [📄DTWEX.py]
+│    ├── [📄Yolov8.py]
 
 ├── 📂 screen/
-│ ├── **init**.py
-│ ├── 📄 [main.py]
-│ ├── 📄 [page1.py]
-│ ├── 📄 [page2.py]
-│ ├── 📄 [page3.py]
+│    ├── __init__.py
+│    ├── 📄 [main.py]
+│    ├── 📄 [page1.py]
+│    ├── 📄 [page2.py]
+│    ├── 📄 [page3.py]
 
 ├── 📂 src/
-│ ├── 📂 images/
-│ ├── 📄 logo.jpg
-│ ├── 📂 mp4/
-│ ├──📄 video1.mp4
-│ ├──📄 video2.mp4
-│ ├──📄 video3.mp4
-│ ├──📄 video4.mp4
-│ ├──📄 video5.mp4
-│ └── 📄 video6.mp4
+│    ├── 📂 images/
+│        ├── 📄 logo.jpg
+│    ├── 📂 mp4/
+│        ├── 📄 video1.mp4
+│        ├── 📄 video2.mp4
+│        ├── 📄 video3.mp4
+│        ├── 📄 video4.mp4
+│        ├── 📄 video5.mp4
+│        └── 📄 video6.mp4
 ```
 
 ---
