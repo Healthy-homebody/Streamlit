@@ -2,8 +2,6 @@ import cv2
 import numpy as np
 from ultralytics import YOLO
 from dtaidistance import dtw
-import sys
-import os
 
 # YOLO 모델 불러오기
 model = YOLO('yolov8n-pose.pt')  # YOLOv8 포즈 모델 경로
@@ -133,8 +131,10 @@ def compare_videos(video_path1, video_path2, model):
     # 유사도를 계산 (거리가 작을수록 더 유사함)
     print(f"DTW Distance between the two videos: {dtw_distance}")
 
-# 예시 실행
-video1_path = 'datasets/video6.mp4'  # 첫 번째 영상 경로
-video2_path = 'datasets/video6111.mp4'  # 두 번째 영상 경로
+    return dtw_distance  # DTW 거리 반환 추가
 
-compare_videos(video1_path, video2_path, model)
+# # 예시 실행
+# video1_path = 'datasets/video6.mp4'  # 첫 번째 영상 경로
+# video2_path = 'datasets/video6111.mp4'  # 두 번째 영상 경로
+
+# compare_videos(video1_path, video2_path, model)

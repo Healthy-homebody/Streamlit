@@ -63,9 +63,13 @@ def show():
             # 동작 유사도 측정 중이라는 메시지 표시
             with st.spinner('동작 유사도 측정 중...'):
                 # 유사도 측정을 위해 DTW 모델 적용
-                compare_videos(description_video_path, uploaded_video_path, model=model)  # compare_videos 함수 실행
-            
+                dtw_distance = compare_videos(description_video_path, uploaded_video_path, model=model)  # DTW 거리 반환
+                
             st.success('유사도 측정 완료!')
+            if dtw_distance is not None:
+                st.write(f"동작 유사도 측정 결과 : {dtw_distance}")  # DTW 거리 출력
+            else:
+                st.write("동작 유사도 측정 결과를 가져오지 못했습니다.")
     else:
         st.write("비디오를 선택하거나 업로드해 주세요.")
 
