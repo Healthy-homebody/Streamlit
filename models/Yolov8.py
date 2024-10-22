@@ -1,6 +1,8 @@
 from ultralytics.utils.plotting import Annotator
 from ultralytics import YOLO
 import cv2
+import sys
+import os
 
 # pip install ultralytics
 # pip install opencv-python

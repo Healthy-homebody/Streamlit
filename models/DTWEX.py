@@ -2,6 +2,8 @@ import cv2
 import numpy as np
 from ultralytics import YOLO
 from dtaidistance import dtw
+import sys
+import os
 
 # YOLO 모델 불러오기
 model = YOLO('yolov8n-pose.pt')  # YOLOv8 포즈 모델 경로

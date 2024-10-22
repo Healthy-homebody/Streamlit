@@ -4,11 +4,13 @@ import sys
 import os
 import cv2
 import tempfile  # 임시 파일을 저장하기 위해 사용
-from ultralytics import YOLO
-from models.DTWEX import compare_videos 
 
 # 시스템 경로 추가
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from ultralytics import YOLO
+from models.DTWEX import compare_videos 
+from dtaidistance import dtw
 
 def save_uploaded_file(uploaded_file):
     """업로드된 비디오 파일을 임시 파일로 저장하고, 그 파일 경로를 반환."""
