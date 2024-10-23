@@ -1,0 +1,14 @@
+# Streamlit for the web application
+streamlit
+
+# OpenCV for image and video processing (headless version for servers)
+opencv-python-headless
+
+# YOLOv8 for object detection and pose estimation
+ultralytics
+
+# Dynamic Time Warping for similarity calculation between sequences
+dtaidistance
+
+# Pillow for image processing (used in conjunction with OpenCV)
+Pillow
