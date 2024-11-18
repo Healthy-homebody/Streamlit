@@ -6,6 +6,7 @@ import page1
 import page2
 import page3
 
+# .venv\Scripts\activate
 # streamlit run screen/main.py
 
 icon_path = os.path.join(os.path.dirname(__file__), '../src/images/logo.jpg')
