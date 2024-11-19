@@ -9,14 +9,10 @@ import tempfile  # 임시 파일을 저장하기 위해 사용
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from ultralytics import YOLO
-from models.DTWEX import compare_videos 
+from models.DTWEX import compare_videos
 from dtaidistance import dtw
+from models.gpt import get_advice_based_on_similarity  # gpt 모듈 임포트
 
-def save_uploaded_file(uploaded_file):
-    """업로드된 비디오 파일을 임시 파일로 저장하고, 그 파일 경로를 반환."""
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as temp_file:
-        temp_file.write(uploaded_file.read())  # 업로드된 파일을 임시 파일에 저장
-        return temp_file.name  # 임시 파일 경로 반환
 
 def show():
     st.title("동작 비교 페이지")
@@ -68,6 +64,11 @@ def show():
             st.success('유사도 측정 완료!')
             if dtw_distance is not None:
                 st.write(f"동작 유사도 측정 결과 : {dtw_distance}")  # DTW 거리 출력
+
+                with st.spinner('동작에 대한 피드백 생성 중...'):
+                    # GPT-4 모델을 통해 피드백 제공
+                    advice = get_advice_based_on_similarity(dtw_distance, st.session_state.selected_action)
+                    st.write(f"GPT-4 조언: {advice}")  # GPT-4 조언 출력
             else:
                 st.write("동작 유사도 측정 결과를 가져오지 못했습니다.")
     else:
@@ -75,3 +76,25 @@ def show():
 
     if st.button("완료", key="finish"):
         st.session_state.selected_page = "main"  # 완료 버튼 클릭 시 main 페이지로 이동
+        
+        
+        
+def load_css(file_path):
+    """CSS 파일 내용을 읽어 반환"""
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            return f.read()
+    except FileNotFoundError:
+        raise FileNotFoundError(f"CSS 파일을 찾을 수 없습니다: {file_path}")
+    
+# CSS 파일 경로
+css_path = os.path.join(os.path.dirname(__file__), '../src/styles.css')
+
+# CSS 로드 및 적용
+st.markdown(f"<style>{load_css(css_path)}</style>", unsafe_allow_html=True)
+
+def save_uploaded_file(uploaded_file):
+    """업로드된 비디오 파일을 임시 파일로 저장하고, 그 파일 경로를 반환."""
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as temp_file:
+        temp_file.write(uploaded_file.read())  # 업로드된 파일을 임시 파일에 저장
+        return temp_file.name  # 임시 파일 경로 반환

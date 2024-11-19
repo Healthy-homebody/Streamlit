@@ -1,20 +1,11 @@
 # 스트레칭 영상 업로드 페이지 (page2)
 import streamlit as st
+import os
 
 def show():
     st.title("스트레칭 영상 업로드 페이지")
     st.write("여기는 스트레칭 영상 업로드 페이지입니다.")
     
-    # 버튼 스타일 적용
-    button_style = """
-        <style>
-        .stButton button {
-            width: 80%;
-            height: 50px;
-            font-size: 18px;
-        }
-        </style>
-    """
     st.markdown(button_style, unsafe_allow_html=True)
 
     # 파일 업로드 기능 추가
@@ -42,3 +33,19 @@ def show():
     with col2:
         if st.button("다음", key="next"):
             st.session_state.selected_page = "page3"  # 다음 버튼 클릭 시 page3로 이동
+            
+            
+# CSS 스타일
+def load_css(file_path):
+    """CSS 파일 내용을 읽어 반환"""
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            return f.read()
+    except FileNotFoundError:
+        raise FileNotFoundError(f"CSS 파일을 찾을 수 없습니다: {file_path}")
+
+# CSS 파일 경로
+css_path = os.path.join(os.path.dirname(__file__), '../src/styles.css')
+
+# CSS 로드 및 적용
+st.markdown(f"<style>{load_css(css_path)}</style>", unsafe_allow_html=True)

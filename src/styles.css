@@ -1,0 +1,267 @@
+@import url("https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600&display=swap");
+
+/* 전역 스타일 */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #fafafa;
+  color: #1d1d1f;
+}
+
+/* Main 페이지 스타일 */
+.main-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.main-title {
+  font-size: 2rem;
+  color: #333;
+}
+
+html,
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+  background-color: #fafafa;
+  color: #1d1d1f;
+}
+
+/* 타이틀 스타일 */
+.title-style {
+  font-size: 40px;
+  font-weight: 600;
+  color: #1d1d1f;
+  text-align: center;
+  margin: 40px 0;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+}
+
+/* 서브타이틀 스타일 */
+.sub-title-style {
+  font-size: 28px;
+  color: #86868b;
+  text-align: center;
+  margin: 24px 0;
+  font-weight: 500;
+  letter-spacing: -0.3px;
+}
+
+/* 설명 텍스트 스타일 */
+.description-style {
+  font-size: 17px;
+  color: #494949;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 32px;
+  border-radius: 18px;
+  margin: 24px 0;
+  line-height: 1.5;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* 강조 텍스트 스타일 */
+.highlight {
+  color: #06c;
+  font-weight: 500;
+}
+
+/* 버튼 스타일 */
+.stButton button {
+  background-color: #06c;
+  color: white;
+  font-size: 17px;
+  padding: 12px 24px;
+  border-radius: 12px;
+  border: none;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  width: 100%;
+  margin: 8px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stButton button:hover {
+  background-color: #0051c3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 카드 스타일 */
+.card-style {
+  background-color: white;
+  border-radius: 20px;
+  padding: 24px;
+  margin: 16px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card-style:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 섹션 스타일 */
+.section {
+  margin: 40px 0;
+  padding: 0 24px;
+}
+
+/* 비디오 플레이어 스타일 */
+.stVideo {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 파일 업로더 스타일 */
+.stFileUploader {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  border: 2px dashed #06c;
+}
+
+/* 진행 상태바 스타일 */
+.stProgress {
+  height: 6px;
+  border-radius: 3px;
+  background-color: #e5e5e5;
+}
+
+.stProgress > div {
+  background-color: #06c;
+}
+
+/* 사이드바 스타일 */
+.css-1d391kg {
+  background-color: #f5f5f7;
+}
+
+/* 선택 박스 스타일 */
+.stSelectbox {
+  border-radius: 12px;
+}
+
+/* 동작 설명 컨테이너 스타일 */
+.pose-description-container {
+  background-color: white;
+  border-radius: 16px;
+  padding: 24px;
+  margin: 16px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.pose-description-container h3 {
+  color: #1d1d1f;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  border-bottom: 2px solid #e5e5e5;
+  padding-bottom: 8px;
+}
+
+/* 리스트 스타일 */
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+li {
+  margin: 8px 0;
+  padding-left: 24px;
+  position: relative;
+}
+
+li:before {
+  content: "•";
+  color: #06c;
+  position: absolute;
+  left: 8px;
+}
+
+/* 메인 컨테이너 스타일 */
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+/* 그리드 레이아웃 스타일 */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin: 32px 0;
+}
+
+/* 결과 카드 스타일 */
+.result-card {
+  background-color: white;
+  border-radius: 16px;
+  padding: 24px;
+  margin: 16px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 알림 스타일 */
+.stAlert {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Page1 스타일 */
+.page1-container {
+  background-color: #f0f8ff;
+  padding: 20px;
+}
+
+.page1-text {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.stButton button {
+  width: 80%;
+  height: 50px;
+  font-size: 18px;
+}
+.description-container {
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+.description-container h3 {
+  color: #333;
+  border-bottom: 2px solid #333;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+/* Page2 스타일 */
+.page2-container {
+  background-color: #ffe4e1;
+  padding: 20px;
+}
+
+.page2-text {
+  font-size: 1.2rem;
+  color: #666;
+}
+
+/* Page3 스타일 */
+.page3-container {
+  background-color: #e6e6fa;
+  padding: 20px;
+}
+
+.page3-text {
+  font-size: 1.2rem;
+  color: #777;
+}

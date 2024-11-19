@@ -4,29 +4,6 @@ import os
 def show():
     st.title("동작 설명 페이지")
     
-    # 스타일 적용
-    st.markdown("""
-        <style>
-        .stButton button {
-            width: 80%;
-            height: 50px;
-            font-size: 18px;
-        }
-        .description-container {
-            background-color: #f0f0f0;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-        .description-container h3 {
-            color: #333;
-            border-bottom: 2px solid #333;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
-        </style>
-    """, unsafe_allow_html=True)
-    
     # 동작 설명 및 동영상 정보 딕셔너리
     action_info = {
         "로우 런지(Low Lunge)": {
@@ -161,3 +138,16 @@ def show():
         for line in section_content:
             st.markdown(f"- {line}")
 
+def load_css(file_path):
+    """CSS 파일 내용을 읽어 반환"""
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            return f.read()
+    except FileNotFoundError:
+        raise FileNotFoundError(f"CSS 파일을 찾을 수 없습니다: {file_path}")
+
+# CSS 파일 경로
+css_path = os.path.join(os.path.dirname(__file__), '../src/styles.css')
+
+# CSS 로드 및 적용
+st.markdown(f"<style>{load_css(css_path)}</style>", unsafe_allow_html=True)
