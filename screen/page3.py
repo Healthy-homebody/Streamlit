@@ -2,11 +2,26 @@
 import streamlit as st
 import sys
 import os
-import cv2
-import tempfile  # 임시 파일을 저장하기 위해 사용
+import tempfile
 
-# 시스템 경로 추가
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# OpenCV import with detailed error handling
+try:
+    import cv2
+except ImportError as e:
+    st.error(f"""
+    OpenCV 임포트 중 오류가 발생했습니다.
+    오류 메시지: {str(e)}
+    
+    다음 단계를 시도해보세요:
+    1. Visual C++ redistributable 설치
+    2. 가상환경에서 'pip install opencv-python==4.8.1.78' 실행
+    """)
+    sys.exit(1)
+
+# 시스템 경로 추가 (Windows 경로 형식 사용)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
 
 from ultralytics import YOLO
 from models.DTWEX import compare_videos
