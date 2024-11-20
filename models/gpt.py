@@ -1,43 +1,59 @@
-# models/gpt.py
-import openai
 import os
+import openai
 
-# OpenAI API 키 로딩 (환경변수로 설정된 키 사용)
+# OpenAI API 키 로딩
 openai.api_key = os.getenv("OPENAI_API_KEY")
+# openai.api_key = ""  # OpenAI API 키
 
 def get_advice_based_on_similarity(dtw_distance: float, action_name: str) -> str:
     """
-    DTW 유사도 거리 값에 기반하여 GPT-4 모델을 사용해 조언을 생성하는 함수입니다.
+    DTW 유사도 거리 값에 기반하여 GPT-4 ChatCompletion API를 사용해 피드백을 생성하는 함수입니다.
     
     Parameters:
     - dtw_distance: DTW 거리 값 (float)
     - action_name: 동작 이름 (str)
     
     Returns:
-    - 조언 메시지 (str)
+    - 피드백 메시지 (str)
     """
-    
-    # GPT-4에게 제공할 프롬프트 생성
-    prompt = f"""
-    사용자와 {action_name} 동작을 비교한 결과, DTW 거리 값은 {dtw_distance}입니다.
-    이 값에 대한 피드백을 제공해주세요. 유사도가 낮다면 자세 교정을 위한 피드백을, 유사도가 높다면 잘 수행했다고 칭찬하는 피드백을 부탁드립니다.
-    """
-    
+    # 사용자 입력 데이터를 텍스트로 변환하여 AI에 전달
+    user_message = (
+        f"사용자와 '{action_name}' 동작을 비교한 결과, DTW 거리 값은 {dtw_distance}입니다.\n"
+        "이 값에 기반하여 다음과 같은 피드백을 제공해주세요:\n"
+        "- 유사도가 낮을 경우: 자세를 교정하기 위한 구체적인 피드백 제공.\n"
+        "- 유사도가 높을 경우: 칭찬과 간단한 개선점을 제안.\n"
+    )
+
+    # OpenAI에게 전달할 메시지 설정
+    messages = [
+        {
+            "role": "system",
+            "content": (
+                "당신은 피트니스 전문가입니다. 사용자의 운동 동작과 유사도를 평가하고, "
+                "그에 따른 개선 피드백을 제공하는 데 전문성을 갖고 있습니다."
+            )
+        },
+        {"role": "user", "content": user_message}
+    ]
+
     try:
-        # GPT-4 API 호출
-        response = openai.Completion.create(
-            engine="gpt-4o-mini", 
-            prompt=prompt,
-            max_tokens=150,
-            temperature=0.7,  # 창의적인 피드백을 위해 적당한 온도 설정
-            n=1,
-            stop=None
+        # GPT-4 ChatCompletion API 호출
+        result = openai.ChatCompletion.create(
+            model="gpt-4",  # 최신 ChatCompletion 모델 지정
+            messages=messages,
+            temperature=0.7,
+            max_tokens=150
         )
 
-        # GPT-4의 응답에서 텍스트 부분만 추출
-        advice = response.choices[0].text.strip()
+        # AI 응답에서 텍스트 추출
+        advice = result['choices'][0]['message']['content'].strip()
+        print(f"GPT Response:\n{advice}")  # 디버깅을 위해 응답 출력
         return advice
-    
+
     except Exception as e:
         # 에러 발생 시 기본 메시지 반환
-        return f"조언을 생성하는 데 실패했습니다: {str(e)}"
+        print(f"Error: {str(e)}")  # 에러 출력
+        return (
+            "피드백을 생성하는 동안 문제가 발생했습니다. 하지만 다음을 참고하세요:\n"
+            "운동을 반복하면서 올바른 자세를 유지하려고 노력하세요. 꾸준함이 중요합니다!"
+        )
