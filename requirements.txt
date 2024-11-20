@@ -1,8 +1,8 @@
 # Streamlit for the web application
 streamlit
+opencv-python>=4.8.0
 
 # OpenCV for image and video processing (headless version for servers)
-opencv-python-headless>=4.8.0
 setuptools
 
 

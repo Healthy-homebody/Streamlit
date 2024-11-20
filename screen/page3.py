@@ -13,6 +13,12 @@ from models.DTWEX import compare_videos
 from dtaidistance import dtw
 from models.gpt import get_advice_based_on_similarity  # gpt 모듈 임포트
 
+# OpenCV import with error handling
+try:
+    import cv2
+except ImportError:
+    st.error("OpenCV를 불러올 수 없습니다. 시스템 관리자에게 문의하세요.")
+    cv2 = None
 
 def show():
     st.title("동작 비교 페이지")
