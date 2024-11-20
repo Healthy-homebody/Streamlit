@@ -2,7 +2,7 @@
 streamlit
 
 # OpenCV for image and video processing (headless version for servers)
-opencv-python-headless==4.5.3.56
+opencv-python-headless>=4.8.0
 setuptools
 
 
@@ -14,3 +14,6 @@ dtaidistance
 
 # Pillow for image processing (used in conjunction with OpenCV)
 Pillow
+
+# Numpy for numerical operations
+numpy>=1.24.3
