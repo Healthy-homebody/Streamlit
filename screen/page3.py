@@ -5,6 +5,7 @@ import os
 import tempfile
 
 # 시스템 경로 추가 (Windows 경로 형식 사용)
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
