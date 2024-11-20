@@ -41,8 +41,7 @@ def get_advice_based_on_similarity(dtw_distance: float, action_name: str) -> str
         result = openai.ChatCompletion.create(
             model="gpt-4",  # 최신 ChatCompletion 모델 지정
             messages=messages,
-            temperature=0.7,
-            max_tokens=150
+            temperature=0.7
         )
 
         # AI 응답에서 텍스트 추출

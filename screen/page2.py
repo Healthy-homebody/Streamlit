@@ -6,7 +6,7 @@ def show():
     st.title("스트레칭 영상 업로드 페이지")
     st.write("여기는 스트레칭 영상 업로드 페이지입니다.")
     
-    st.markdown(button_style, unsafe_allow_html=True)
+    st.markdown("", unsafe_allow_html=True)
 
     # 파일 업로드 기능 추가
     uploaded_file = st.file_uploader("파일 선택(mp4)", type=["mp4"])
