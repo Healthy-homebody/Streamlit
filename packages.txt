@@ -2,8 +2,10 @@ libgl1-mesa-glx
 libglib2.0-0
 libsm6
 libxext6
-
-qt5-default
+libxrender-dev
+qtbase5-dev
+libqt5gui5
 libqt5widgets5
 libqt5opengl5-dev
-libqt5gui5
+qttools5-dev-tools
+qtchooser

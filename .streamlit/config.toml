@@ -1,0 +1,6 @@
+[server]
+headless = true
+enableCORS = false
+
+[environment]
+QT_QPA_PLATFORM = "xcb"
