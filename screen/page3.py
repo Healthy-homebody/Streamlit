@@ -3,6 +3,7 @@ import streamlit as st
 import sys
 import os
 import tempfile
+import torch
 
 # 시스템 경로 추가 (Windows 경로 형식 사용)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -11,7 +12,10 @@ parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 
 # Qt 플랫폼 설정
-os.environ["QT_QPA_PLATFORM"] = "offscreen"
+os.environ["QT_QPA_PLATFORM"] = "xcb"
+
+# YOLO 클래스 초기화
+torch.classes.load_library = lambda *args, **kwargs: None
 
 from ultralytics import YOLO
 from models.DTWEX import compare_videos

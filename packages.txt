@@ -1,5 +1,9 @@
+# Open cv
 libgl1-mesa-glx
 libglib2.0-0
 libsm6
 libxext6
-libxrender-dev
+
+# Open cv - QT
+qt5-default
+libqt5widgets5
