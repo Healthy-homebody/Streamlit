@@ -4,6 +4,7 @@ import sys
 import os
 import cv2
 import tempfile  # 임시 파일을 저장하기 위해 사용
+import mimetypes
 
 # 시스템 경로 추가
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -11,16 +12,57 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from ultralytics import YOLO
 from models.DTWEX import compare_videos
 from dtaidistance import dtw
-from models.gpt import get_advice_based_on_similarity  # gpt 모듈 임포트
+from models.gpt import get_advice_based_on_similarity
 
 
-def extract_keypoints_and_display_video_with_window(video_path, model):
+# def apply_yolo_to_video(video_path, model):
+#     """YOLO 모델을 사용하여 비디오에 keypoints 적용 후 비디오 파일로 저장"""
+#     cap = cv2.VideoCapture(video_path)
+    
+#     if not cap.isOpened():
+#         st.error("비디오 파일을 열 수 없습니다.")
+#         return None
+
+#     output_dir = os.path.join(os.path.dirname(__file__), '../src/mp4')
+#     output_path = os.path.join(output_dir, 'yolo_result.mp4')
+    
+#     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+#     out = None
+    
+#     try:
+#         while cap.isOpened():
+#             ret, frame = cap.read()
+#             if not ret:
+#                 break
+            
+#             # YOLO 모델로 프레임 처리
+#             results = model(frame, verbose=False)
+            
+#             # 결과 이미지 렌더링
+#             rendered_frame = results[0].plot()
+            
+#             if out is None:
+#                 height, width, _ = rendered_frame.shape
+#                 out = cv2.VideoWriter(output_path, fourcc, 30, (width, height))
+            
+#             # 프레임 저장
+#             out.write(rendered_frame)
+            
+#     finally:
+#         cap.release()
+#         if out is not None:
+#             out.release()
+    
+#     return output_path
+
+def extract_keypoints_from_video(video_path, model):
     cap = cv2.VideoCapture(video_path)
     if not cap.isOpened():
-        print("비디오를 열 수 없습니다.")
+        st.error("비디오를 열 수 없습니다.")
         return None
 
     keypoints_list = []
+    frames = []
 
     while cap.isOpened():
         ret, frame = cap.read()
@@ -33,20 +75,20 @@ def extract_keypoints_and_display_video_with_window(video_path, model):
 
         if keypoints is not None:
             keypoints_list.append(keypoints)
+            frames.append(frame)  # 동작이 포함된 프레임 저장
 
         # YOLO 결과 렌더링
         rendered_frame = results[0].plot()
 
         # OpenCV 창에 표시
-        cv2.imshow("Keypoints on Video", rendered_frame)
+        cv2.imshow("동작 유사도 비교", rendered_frame)
 
         # 'q'를 누르면 종료
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
     cap.release()
-    cv2.destroyAllWindows()  # 모든 창 닫기
-    return keypoints_list
+    return keypoints_list, frames
 
 def show():
     st.title("동작 비교 페이지")
@@ -92,19 +134,38 @@ def show():
         if st.button("동작 유사도 측정"):
             # 동작 유사도 측정 중이라는 메시지 표시
             with st.spinner('동작 유사도 측정 중...'):
-                # 유사도 측정을 위해 DTW 모델 적용
-                dtw_distance = compare_videos(description_video_path, uploaded_video_path, model=model)  # DTW 거리 반환
+                dtw_distance = compare_videos(description_video_path, uploaded_video_path, model=model)  # DTW 거리 측정
                 
-            st.success('유사도 측정 완료!')
-            if dtw_distance is not None:
+                # # YOLO 모델로 업로드된 비디오에서 keypoints 추출
+                # keypoints_list, frames = extract_keypoints_from_video(uploaded_video_path, model)
+                
+                # # 가장 유사한 동작 이미지 및 가장 비유사한 동작 이미지 추출
+                # similar_frame = frames[0]  # 가장 유사한 동작 프레임 (예시로 첫 번째 프레임을 사용)
+                # dissimilar_frame = frames[-1]  # 가장 비유사한 동작 프레임 (예시로 마지막 프레임을 사용)
+
+                # # 프레임을 이미지로 저장
+                # similar_action_image_path = 'similar_action_image.jpg'
+                # dissimilar_action_image_path = 'dissimilar_action_image.jpg'
+                # cv2.imwrite(similar_action_image_path, similar_frame)
+                # cv2.imwrite(dissimilar_action_image_path, dissimilar_frame)
+
+                # processed_video_path = apply_yolo_to_video(uploaded_video_path, model)
+
+                # st.video(processed_video_path)  # YOLO 처리된 비디오 출력
+                
+                st.success('유사도 측정 완료!')
                 st.write(f"동작 유사도 측정 결과 : {dtw_distance}")  # DTW 거리 출력
+                
+                # # 이미지 출력
+                # st.image(similar_action_image_path, caption="가장 유사한 동작", use_container_width=True)
+                # st.image(dissimilar_action_image_path, caption="가장 비유사한 동작", use_container_width=True)
+
 
                 with st.spinner('동작에 대한 피드백 생성 중...'):
-                    # GPT-4 모델을 통해 피드백 제공
                     advice = get_advice_based_on_similarity(dtw_distance, st.session_state.selected_action)
                     st.write(f"GPT-4 조언: {advice}")  # GPT-4 조언 출력
-            else:
-                st.write("동작 유사도 측정 결과를 가져오지 못했습니다.")
+        else:
+            st.write("동작 유사도 측정 결과를 가져오지 못했습니다.")
     else:
         st.write("비디오를 선택하거나 업로드해 주세요.")
 
@@ -129,6 +190,14 @@ st.markdown(f"<style>{load_css(css_path)}</style>", unsafe_allow_html=True)
 
 def save_uploaded_file(uploaded_file):
     """업로드된 비디오 파일을 임시 파일로 저장하고, 그 파일 경로를 반환."""
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as temp_file:
-        temp_file.write(uploaded_file.read())  # 업로드된 파일을 임시 파일에 저장
-        return temp_file.name  # 임시 파일 경로 반환
+    
+    # 업로드된 파일의 MIME 타입 확인
+    mime_type, _ = mimetypes.guess_type(uploaded_file.name)
+    
+    if mime_type and mime_type.startswith('video'):
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as temp_file:
+            temp_file.write(uploaded_file.read())  # 업로드된 파일을 임시 파일에 저장
+            return temp_file.name  # 임시 파일 경로 반환
+    else:
+        st.error("업로드된 파일은 비디오 파일이어야 합니다.")
+        return None

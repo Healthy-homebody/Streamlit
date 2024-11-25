@@ -28,14 +28,6 @@ css_path = os.path.join(os.path.dirname(__file__), '../src/styles.css')
 # CSS 로드 및 적용
 st.markdown(f"<style>{load_css(css_path)}</style>", unsafe_allow_html=True)
 
-# # CSS 스타일을 적용하여 텍스트 및 버튼 스타일 조정
-# st.markdown(
-#     """     
-#     <style>
-    
-#     </style>"""
-#     , unsafe_allow_html=True
-# )
 
 import page1
 import page2

@@ -77,11 +77,11 @@ def extract_keypoints_and_display_video(video_path, model):
                     cv2.circle(frame, (x, y), 5, (0, 255, 0), -1)  # 녹색 원으로 keypoint 그리기
         
         # 동적으로 윈도우 크기 설정
-        cv2.namedWindow('Keypoints on Video', cv2.WINDOW_NORMAL)
-        cv2.resizeWindow('Keypoints on Video', 800, 600)
+        cv2.namedWindow('Healthy homebody', cv2.WINDOW_NORMAL)
+        cv2.resizeWindow('Healthy homebody', 800, 600)
         
         # 화면에 프레임 보여주기
-        cv2.imshow('Keypoints on Video', frame)
+        cv2.imshow('Healthy homebody', frame)
         
         # 'q' 키를 누르면 종료
         if cv2.waitKey(1) & 0xFF == ord('q'):
