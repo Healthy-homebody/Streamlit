@@ -2,32 +2,51 @@
 import streamlit as st
 import sys
 import os
-import tempfile
-import torch
+import cv2
+import tempfile  # 임시 파일을 저장하기 위해 사용
 
-# 시스템 경로 추가 (Windows 경로 형식 사용)
+# 시스템 경로 추가
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
-sys.path.append(parent_dir)
-
-# Qt 플랫폼 설정
-os.environ["QT_QPA_PLATFORM"] = "xcb"
-
-# YOLO 클래스 초기화
-torch.classes.load_library = lambda *args, **kwargs: None
 
 from ultralytics import YOLO
 from models.DTWEX import compare_videos
 from dtaidistance import dtw
 from models.gpt import get_advice_based_on_similarity  # gpt 모듈 임포트
 
-# OpenCV import with error handling
-try:
-    import cv2
-except ImportError:
-    st.error("OpenCV를 불러올 수 없습니다. 시스템 관리자에게 문의하세요.")
-    cv2 = None
+
+def extract_keypoints_and_display_video_with_window(video_path, model):
+    cap = cv2.VideoCapture(video_path)
+    if not cap.isOpened():
+        print("비디오를 열 수 없습니다.")
+        return None
+
+    keypoints_list = []
+
+    while cap.isOpened():
+        ret, frame = cap.read()
+        if not ret:
+            break
+
+        # YOLO 모델로 keypoints 추출
+        results = model(frame, verbose=False)
+        keypoints = results[0].keypoints.cpu().numpy() if results[0].keypoints is not None else None
+
+        if keypoints is not None:
+            keypoints_list.append(keypoints)
+
+        # YOLO 결과 렌더링
+        rendered_frame = results[0].plot()
+
+        # OpenCV 창에 표시
+        cv2.imshow("Keypoints on Video", rendered_frame)
+
+        # 'q'를 누르면 종료
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    cap.release()
+    cv2.destroyAllWindows()  # 모든 창 닫기
+    return keypoints_list
 
 def show():
     st.title("동작 비교 페이지")

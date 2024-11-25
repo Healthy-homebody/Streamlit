@@ -1,3 +1,5 @@
+## pip install -r requirements.txt   : Full Library Download Command
+
 # Streamlit for web application
 streamlit
 

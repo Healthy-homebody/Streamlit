@@ -1,10 +1,16 @@
 import os
 import openai
 
+# .env 파일에서 환경 변수 로딩
+load_dotenv()
+
 # OpenAI API 키 로딩
 openai.api_key = os.getenv("OPENAI_API_KEY")
 # openai.api_key = ""  # OpenAI API 키
+
 # setx OPENAI_API_KEY "your_api_key_here" # 가상환경에서의 openai api key 설정
+
+
 
 def get_advice_based_on_similarity(dtw_distance: float, action_name: str) -> str:
     """
