@@ -10,6 +10,9 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 
+# Qt 플랫폼 설정
+os.environ["QT_QPA_PLATFORM"] = "offscreen"
+
 from ultralytics import YOLO
 from models.DTWEX import compare_videos
 from dtaidistance import dtw
