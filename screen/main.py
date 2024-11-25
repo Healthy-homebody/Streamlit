@@ -32,6 +32,7 @@ st.markdown(f"<style>{load_css(css_path)}</style>", unsafe_allow_html=True)
 import page1
 import page2
 import page3
+import recommendation
 
 # 세션 상태에서 선택된 페이지를  <sp저장할 수 있도록 초기화
 if 'selected_page' not in st.session_state:
@@ -40,13 +41,13 @@ if 'selected_page' not in st.session_state:
 # 사이드바
 page = st.sidebar.selectbox(
     "페이지를 선택하세요", 
-    ["main", "page1", "page2", "page3"],
-    index=["main", "page1", "page2", "page3"].index(st.session_state.selected_page)
+    ["main", "page1", "page2", "page3", "recommendation"],
+    index=["main", "page1", "page2", "page3", "recommendation"].index(st.session_state.selected_page)
 )
 
 # 메인 페이지
 if page == "main":
-    st.markdown('<div class="title-style">AI 기반 필라테스 동작 유사도 분석 서비스</div>', unsafe_allow_html=True)
+    st.markdown('<div class="title-style">Healthy Homebody</div>', unsafe_allow_html=True)
     
     st.markdown('<div class="sub-title-style section">필라테스 동작을 선택하세요</div>', unsafe_allow_html=True)
 
@@ -82,7 +83,7 @@ if page == "main":
         제공하여 체력 증진과 비만 예방을 목표로 하고 있습니다.
         <br><br>
         저희는 <span class="highlight">YOLOv8 포즈 추정 모델</span>을 활용하여 사용자의 운동 동작을 분석하고, 
-        올바른 자세를 유지할 수 있도록an class="highlight">정확한 피드백</span>을 제공합니다. 
+        올바른 자세를 유지할 수 있도록<span class="highlight">정확한 피드백</span>을 제공합니다. 
         편리한 웹 기반 플랫폼을 통해 사용자는 언제 어디서나 스트레칭을 수행하고 자신의 건강 상태를 관리할 수 있습니다.
         <br><br>
         또한, 본 서비스는 재택근무자나 외출을 꺼리는 사용자들을 위한 맞춤형 솔루션으로, 
@@ -102,3 +103,5 @@ elif page == "page2":
     page2.show()
 elif page == "page3":
     page3.show()
+elif page == "recommendation":
+    recommendation.show()

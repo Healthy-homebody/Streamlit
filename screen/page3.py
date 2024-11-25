@@ -131,11 +131,14 @@ def show():
 
     # 동작 유사도 측정 버튼
     if description_video_path and uploaded_video_path:
-        if st.button("동작 유사도 측정"):
-            # 동작 유사도 측정 중이라는 메시지 표시
-            with st.spinner('동작 유사도 측정 중...'):
-                dtw_distance = compare_videos(description_video_path, uploaded_video_path, model=model)  # DTW 거리 측정
-                
+        col1, col2 = st.columns(2)  # 두 개의 열 생성
+        
+        with col1:
+            if st.button("동작 유사도 측정"):
+                # 동작 유사도 측정 중이라는 메시지 표시
+                with st.spinner('동작 유사도 측정 중...'):
+                    dtw_distance = compare_videos(description_video_path, uploaded_video_path, model=model)  # DTW 거리 측정
+                    
                 # # YOLO 모델로 업로드된 비디오에서 keypoints 추출
                 # keypoints_list, frames = extract_keypoints_from_video(uploaded_video_path, model)
                 
@@ -164,14 +167,16 @@ def show():
                 with st.spinner('동작에 대한 피드백 생성 중...'):
                     advice = get_advice_based_on_similarity(dtw_distance, st.session_state.selected_action)
                     st.write(f"GPT-4 조언: {advice}")  # GPT-4 조언 출력
-        else:
-            st.write("동작 유사도 측정 결과를 가져오지 못했습니다.")
+        # else:
+        #     st.write("동작 유사도 측정 결과를 가져오지 못했습니다.")
+        with col2:
+            if st.button("완료", key="finish"):
+                st.session_state.selected_page = "main"  # 완료 버튼 클릭 시 main 페이지로 이동
+    
     else:
         st.write("비디오를 선택하거나 업로드해 주세요.")
 
-    if st.button("완료", key="finish"):
-        st.session_state.selected_page = "main"  # 완료 버튼 클릭 시 main 페이지로 이동
-        
+
         
         
 def load_css(file_path):
