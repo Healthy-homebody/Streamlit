@@ -2,10 +2,6 @@
 import streamlit as st
 import os
 
-import page1
-import page2
-import page3
-
 # .venv\Scripts\activate
 # streamlit run screen/main.py
 
@@ -41,6 +37,9 @@ st.markdown(f"<style>{load_css(css_path)}</style>", unsafe_allow_html=True)
 #     , unsafe_allow_html=True
 # )
 
+import page1
+import page2
+import page3
 
 # 세션 상태에서 선택된 페이지를  <sp저장할 수 있도록 초기화
 if 'selected_page' not in st.session_state:
@@ -102,6 +101,8 @@ if page == "main":
         """, 
         unsafe_allow_html=True
     )
+
+
 
 elif page == "page1":
     page1.show()
