@@ -16,3 +16,7 @@ Pillow
 
 # Numpy for numerical operations
 numpy>=1.24.3
+
+# openai for GPT-4o-mini API
+openai==0.28.0
+torch
