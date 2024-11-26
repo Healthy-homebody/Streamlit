@@ -48,7 +48,7 @@ def get_advice_based_on_similarity(dtw_distance: float, action_name: str) -> str
     try:
         # GPT-4 ChatCompletion API 호출
         result = openai.ChatCompletion.create(
-            model="gpt-4",  # 최신 ChatCompletion 모델 지정
+            model="gpt-4o-mini",  
             messages=messages,
             temperature=0.7
         )

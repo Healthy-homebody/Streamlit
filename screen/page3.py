@@ -91,6 +91,10 @@ def extract_keypoints_from_video(video_path, model):
     return keypoints_list, frames
 
 def show():
+    # 세션 상태 초기화
+    if 'similarity_measured' not in st.session_state:
+        st.session_state.similarity_measured = False
+    
     st.title("동작 비교 페이지")
     st.write("여기는 동작 비교 페이지입니다.")
 
@@ -138,40 +142,47 @@ def show():
                 # 동작 유사도 측정 중이라는 메시지 표시
                 with st.spinner('동작 유사도 측정 중...'):
                     dtw_distance = compare_videos(description_video_path, uploaded_video_path, model=model)  # DTW 거리 측정
-                    
-                # # YOLO 모델로 업로드된 비디오에서 keypoints 추출
-                # keypoints_list, frames = extract_keypoints_from_video(uploaded_video_path, model)
-                
-                # # 가장 유사한 동작 이미지 및 가장 비유사한 동작 이미지 추출
-                # similar_frame = frames[0]  # 가장 유사한 동작 프레임 (예시로 첫 번째 프레임을 사용)
-                # dissimilar_frame = frames[-1]  # 가장 비유사한 동작 프레임 (예시로 마지막 프레임을 사용)
+                    st.session_state.dtw_distance = dtw_distance  # 측정 결과 저장
+                    st.session_state.similarity_measured = True  # 유사도 측정 완료 표시
 
-                # # 프레임을 이미지로 저장
-                # similar_action_image_path = 'similar_action_image.jpg'
-                # dissimilar_action_image_path = 'dissimilar_action_image.jpg'
-                # cv2.imwrite(similar_action_image_path, similar_frame)
-                # cv2.imwrite(dissimilar_action_image_path, dissimilar_frame)
-
-                # processed_video_path = apply_yolo_to_video(uploaded_video_path, model)
-
-                # st.video(processed_video_path)  # YOLO 처리된 비디오 출력
-                
                 st.success('유사도 측정 완료!')
                 st.write(f"동작 유사도 측정 결과 : {dtw_distance}")  # DTW 거리 출력
-                
-                # # 이미지 출력
-                # st.image(similar_action_image_path, caption="가장 유사한 동작", use_container_width=True)
-                # st.image(dissimilar_action_image_path, caption="가장 비유사한 동작", use_container_width=True)
-
 
                 with st.spinner('동작에 대한 피드백 생성 중...'):
                     advice = get_advice_based_on_similarity(dtw_distance, st.session_state.selected_action)
+                    st.session_state.advice = advice  # 조언 저장
                     st.write(f"GPT-4 조언: {advice}")  # GPT-4 조언 출력
+                    
+                    # # YOLO 모델로 업로드된 비디오에서 keypoints 추출
+                    # keypoints_list, frames = extract_keypoints_from_video(uploaded_video_path, model)
+                    
+                    # # 가장 유사한 동작 이미지 및 가장 비유사한 동작 이미지 추출
+                    # similar_frame = frames[0]  # 가장 유사한 동작 프레임 (예시로 첫 번째 프레임을 사용)
+                    # dissimilar_frame = frames[-1]  # 가장 비유사한 동작 프레임 (예시로 마지막 프레임을 사용)
+
+                    # # 프레임을 이미지로 저장
+                    # similar_action_image_path = 'similar_action_image.jpg'
+                    # dissimilar_action_image_path = 'dissimilar_action_image.jpg'
+                    # cv2.imwrite(similar_action_image_path, similar_frame)
+                    # cv2.imwrite(dissimilar_action_image_path, dissimilar_frame)
+
+                    # processed_video_path = apply_yolo_to_video(uploaded_video_path, model)
+
+                    # st.video(processed_video_path)  # YOLO 처리된 비디오 출력
+                    
+                    # # 이미지 출력
+                    # st.image(similar_action_image_path, caption="가장 유사한 동작", use_container_width=True)
+                    # st.image(dissimilar_action_image_path, caption="가장 비유사한 동작", use_container_width=True)
+
+        with col2:
+            # 동작 유사도 측정이 완료된 경우에만 다음 버튼 활성화
+            if st.session_state.similarity_measured and st.button("다음", key="next"):
+                st.session_state.selected_page = "recommendation"
+                
+
+
         # else:
         #     st.write("동작 유사도 측정 결과를 가져오지 못했습니다.")
-        with col2:
-            if st.button("완료", key="finish"):
-                st.session_state.selected_page = "main"  # 완료 버튼 클릭 시 main 페이지로 이동
     
     else:
         st.write("비디오를 선택하거나 업로드해 주세요.")
