@@ -1,5 +1,3 @@
-## pip install -r requirements.txt   : Full Library Download Command
-
 # Streamlit for web application
 streamlit
 
@@ -19,8 +17,14 @@ Pillow
 # Numpy for numerical operations
 numpy>=1.24.3
 
-# openai for GPT-4o-mini API
+# OpenAI for GPT API
 openai==0.28.0
+
+# PyTorch for machine learning
 torch
 
+# Scikit-learn for machine learning utilities
 scikit-learn
+
+# dotenv for environment variable management
+python-dotenv

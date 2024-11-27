@@ -4,7 +4,7 @@ from ultralytics import YOLO
 from dtaidistance import dtw
 
 # YOLO 모델 불러오기
-model = YOLO('yolov8n-pose.pt')  # YOLOv8 포즈 모델 경로
+model = YOLO('yolov8m-pose.pt')  # YOLOv8 포즈 모델 경로
 
 # keypoints 좌표를 [0, 1]로 정규화하는 함수
 def normalize_keypoints(keypoints, frame_width, frame_height):
