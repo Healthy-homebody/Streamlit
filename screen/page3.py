@@ -5,6 +5,8 @@ import os
 import cv2
 import tempfile  # 임시 파일을 저장하기 위해 사용
 import mimetypes
+import logging
+
 from ultralytics import YOLO
 # from models.DTWEX import compare_videos
 # from dtaidistance import dtw
@@ -13,10 +15,14 @@ from ultralytics import YOLO
 # 시스템 경로 추가
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+logging.basicConfig(level=logging.DEBUG)
+
 def process_and_save_video(input_video_path, output_video_path, model):
     """
     YOLO 모델을 사용하여 입력 비디오를 처리하고 결과를 저장합니다.
     """
+    import numpy as np
+    
     cap = cv2.VideoCapture(input_video_path)
     if not cap.isOpened():
         st.error("비디오를 열 수 없습니다.")
@@ -28,9 +34,8 @@ def process_and_save_video(input_video_path, output_video_path, model):
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     
     # H.264 코덱 사용 (더 안정적인 비디오 형식)
-    fourcc = cv2.VideoWriter_fourcc(*'avc1')
-    out = cv2.VideoWriter(output_video_path, fourcc, fps, (width, height), isColor=True)
-
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    out = cv2.VideoWriter(output_video_path, fourcc, fps, (width, height))
     frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     if frame_count == 0:
         st.error("비디오에 프레임이 없습니다.")
@@ -50,7 +55,8 @@ def process_and_save_video(input_video_path, output_video_path, model):
             
             # 결과 시각화
             processed_frame = results[0].plot() if results else frame
-
+            frames.append(processed_frame)
+                    
             # 프레임 저장
             out.write(processed_frame)
             processed_frames += 1

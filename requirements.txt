@@ -28,3 +28,7 @@ scikit-learn
 
 # dotenv for environment variable management
 python-dotenv
+
+# FFmpeg for video processing
+imageio-ffmpeg
+
