@@ -3,7 +3,7 @@ libglib2.0-0
 libsm6
 libxext6
 libxrender-dev
-ffmpeg-python
+ffmpeg
 
 qtbase5-dev
 libqt5gui5
