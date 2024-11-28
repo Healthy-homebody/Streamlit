@@ -6,9 +6,9 @@ import cv2
 import tempfile  # 임시 파일을 저장하기 위해 사용
 import mimetypes
 from ultralytics import YOLO
-from models.DTWEX import compare_videos
-from dtaidistance import dtw
-from models.gpt import get_advice_based_on_similarity
+# from models.DTWEX import compare_videos
+# from dtaidistance import dtw
+# from models.gpt import get_advice_based_on_similarity
 
 # 시스템 경로 추가
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
