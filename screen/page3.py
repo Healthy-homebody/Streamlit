@@ -11,7 +11,7 @@ from ultralytics import YOLO
 from models.gpt import get_advice_based_on_similarity
 
 # 시스템 경로 추가
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'models')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 def process_and_save_video(input_video_path, output_video_path, model):
     """
