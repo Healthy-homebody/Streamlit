@@ -14,6 +14,9 @@ from models.DTWEX import compare_videos
 from dtaidistance import dtw
 from models.gpt import get_advice_based_on_similarity
 
+if 'QT_QPA_PLATFORM' in os.environ:
+    del os.environ['QT_QPA_PLATFORM']
+
 def extract_keypoints_from_video(video_path, model):
     cap = cv2.VideoCapture(video_path)
     if not cap.isOpened():
