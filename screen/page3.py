@@ -14,9 +14,9 @@ from models.DTWEX import compare_videos
 from dtaidistance import dtw
 from models.gpt import get_advice_based_on_similarity
 
-if 'QT_QPA_PLATFORM' in os.environ:
-    del os.environ['QT_QPA_PLATFORM']
-    
+# 환경 변수 처리
+os.environ.pop('QT_QPA_PLATFORM', None)
+
 # Torch 및 일반 경고 무시
 warnings.filterwarnings("ignore")
 
@@ -65,7 +65,7 @@ def show():
     st.write("여기는 동작 비교 페이지입니다.")
 
     # YOLO 모델 로드
-    model = YOLO('yolov8m-pose.pt')
+    model = YOLO('yolov8m-pose.pt', verbose=False)
 
     # 동작 설명 비디오 처리
     if 'selected_action' in st.session_state:
