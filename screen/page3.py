@@ -6,6 +6,7 @@ import cv2
 import tempfile  # 임시 파일을 저장하기 위해 사용
 import mimetypes
 import warnings
+import torch
 
 # 시스템 경로 추가
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -26,6 +27,8 @@ try:
     settings.reset()
 except Exception as e:
     print(f"Ultralytics 설정 초기화 중 오류: {e}")
+    
+torch.classes._path = None  # 경로 문제 회피
 
 def extract_keypoints_from_video(video_path, model):
     cap = cv2.VideoCapture(video_path)

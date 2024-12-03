@@ -23,6 +23,8 @@ openai==0.28.0
 
 # PyTorch for machine learning
 torch
+torchaudio
+torchvision
 
 # Scikit-learn for machine learning utilities
 scikit-learn
@@ -32,4 +34,3 @@ python-dotenv
 
 # FFmpeg for video processing
 imageio-ffmpeg
-
