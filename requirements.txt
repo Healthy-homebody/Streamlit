@@ -22,7 +22,7 @@ numpy>=1.24.3
 openai==0.28.0
 
 # PyTorch for machine learning
-torch
+torch==2.1.1
 torchaudio
 torchvision
 

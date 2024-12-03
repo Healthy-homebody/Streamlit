@@ -22,7 +22,10 @@ os.environ.pop('QT_QPA_PLATFORM', None)
 # Torch 및 일반 경고 무시
 warnings.filterwarnings("ignore")
     
-torch.classes._path = None  # 경로 문제 회피
+try:
+    delattr(torch.classes, '_path')
+except AttributeError:
+    pass
 
 # 설정 초기화 코드 수정
 try:
