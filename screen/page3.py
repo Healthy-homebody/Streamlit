@@ -5,6 +5,7 @@ import os
 import cv2
 import tempfile  # 임시 파일을 저장하기 위해 사용
 import mimetypes
+import warnings
 
 # 시스템 경로 추가
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
