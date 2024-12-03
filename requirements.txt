@@ -4,6 +4,7 @@ streamlit
 # OpenCV for image and video processing (headless version for servers)
 setuptools
 opencv-python-headless>=4.5.3.56
+ffmpeg
 
 # YOLOv8 for object detection and pose estimation
 ultralytics

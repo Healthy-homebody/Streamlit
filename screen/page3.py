@@ -6,9 +6,9 @@ import cv2
 import tempfile  # 임시 파일을 저장하기 위해 사용
 import mimetypes
 from ultralytics import YOLO
-# from models.DTWEX import compare_videos
-# from dtaidistance import dtw
-# from models.gpt import get_advice_based_on_similarity
+from models.DTWEX import compare_videos
+from dtaidistance import dtw
+from models.gpt import get_advice_based_on_similarity
 
 # 시스템 경로 추가
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -122,8 +122,18 @@ def show():
             if processed_video_path:
                 st.success("YOLO 처리 완료! 아래에서 확인하세요.")
                 st.video(processed_video_path)  # 처리된 비디오 재생
+            
+                with st.spinner('동작에 대한 피드백 생성 중...'):
+                    # GPT-4 모델을 통해 피드백 제공
+                    advice = get_advice_based_on_similarity(dtw_distance, st.session_state.selected_action)
+                    st.write(f"GPT-4 조언: {advice}")  # GPT-4 조언 출력
+                    
             else:
                 st.error("YOLO 처리가 실패했습니다.")
+                
+            # 동작 유사도 측정이 완료된 경우에만 다음 버튼 활성화
+            if st.session_state.similarity_measured and st.button("다음", key="next"):
+                st.session_state.selected_page = "recommendation"
     else:
         st.warning("비디오를 업로드해 주세요.")
 
