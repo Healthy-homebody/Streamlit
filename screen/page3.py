@@ -32,7 +32,11 @@ except AttributeError:
 
 # 설정 초기화 코드 수정
 try:
-    settings.reset()
+    from ultralytics.yolo.utils import LOGGER  # Ultralytics의 로그 관리 모듈 가져오기
+
+    # 로그 수준을 경고 이상으로 설정하여 불필요한 메시지 억제
+    LOGGER.setLevel("WARNING")
+    settings.reset() # 기본 설정 초기화
 except Exception as e:
     print(f"Ultralytics 설정 초기화 중 오류: {e}")
 
@@ -109,29 +113,30 @@ def show():
         st.write("업로드된 동영상이 없습니다.")
         uploaded_video_path = None
 
-    # 동작 유사도 측정 버튼
-    if description_video_path and uploaded_video_path:
-        col1, col2 = st.columns(2)  # 두 개의 열 생성
-        
-        with col1:
-            if st.button("동작 유사도 측정"):
+# 동작 유사도 측정 버튼
+if description_video_path and uploaded_video_path:
+    col1, col2 = st.columns(2)  # 두 개의 열 생성
+
+    with col1:
+        if st.button("동작 유사도 측정"):
+            try:
                 # 동작 유사도 측정 중이라는 메시지 표시
                 with st.spinner('동작 유사도 측정 중...'):
                     # 키포인트 및 프레임 추출
                     keypoints_list, original_frames, processed_frames = extract_keypoints_from_video(uploaded_video_path, model)
-                    
+
                     # 처리된 프레임 미리보기 (선택적)
                     st.subheader("처리된 프레임 미리보기")
                     if processed_frames:
                         # 처음 몇 프레임만 보여주기
                         preview_frames = processed_frames[:5]
                         preview_images = [cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) for frame in preview_frames]
-                        
+
                         # 프레임들을 가로로 나란히 표시
                         cols = st.columns(len(preview_images))
                         for col, img in zip(cols, preview_images):
                             col.image(img, use_column_width=True)
-                    
+
                     # DTW 거리 측정
                     dtw_distance = compare_videos(description_video_path, uploaded_video_path, model=model)
                     st.session_state.dtw_distance = dtw_distance  # 측정 결과 저장
@@ -144,19 +149,20 @@ def show():
                     advice = get_advice_based_on_similarity(dtw_distance, st.session_state.selected_action)
                     st.session_state.advice = advice  # 조언 저장
                     st.write(f"GPT-4 조언: {advice}")  # GPT-4 조언 출력
-                    
-        with col2:
-            # 동작 유사도 측정이 완료된 경우에만 다음 버튼 활성화
-            if st.session_state.similarity_measured and st.button("다음", key="next"):
-                st.session_state.selected_page = "recommendation"
-                
 
+            except Exception as e:
+                # 예기치 않은 에러 처리
+                st.error(f"동작 유사도 측정 중 알 수 없는 에러가 발생했습니다: {e}")
+                raise  # 상세 디버깅을 위해 예외를 다시 던짐
 
-        # else:
-        #     st.write("동작 유사도 측정 결과를 가져오지 못했습니다.")
-    
-    else:
-        st.write("비디오를 선택하거나 업로드해 주세요.")
+    with col2:
+        # 동작 유사도 측정이 완료된 경우에만 다음 버튼 활성화
+        if st.session_state.similarity_measured and st.button("다음", key="next"):
+            st.session_state.selected_page = "recommendation"
+
+else:
+    st.write("비디오를 선택하거나 업로드해 주세요.")
+
 
 
         
