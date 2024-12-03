@@ -5,13 +5,16 @@ import os
 import cv2
 import tempfile  # 임시 파일을 저장하기 위해 사용
 import mimetypes
-from ultralytics import YOLO
-# from models.DTWEX import compare_videos
-# from dtaidistance import dtw
-from models.gpt import get_advice_based_on_similarity
 
 # 시스템 경로 추가
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from ultralytics import YOLO
+
+from models.Yolov8 import process_frame
+from models.DTWEX import compare_videos
+from dtaidistance import dtw
+from models.gpt import get_advice_based_on_similarity
 
 def process_and_save_video(input_video_path, output_video_path, model):
     """
