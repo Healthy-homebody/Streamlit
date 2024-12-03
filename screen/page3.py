@@ -11,7 +11,7 @@ import torch
 # 시스템 경로 추가
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from ultralytics import YOLO
+from ultralytics import YOLO, settings
 from models.DTWEX import compare_videos
 from dtaidistance import dtw
 from models.gpt import get_advice_based_on_similarity
@@ -21,14 +21,14 @@ os.environ.pop('QT_QPA_PLATFORM', None)
 
 # Torch 및 일반 경고 무시
 warnings.filterwarnings("ignore")
+    
+torch.classes._path = None  # 경로 문제 회피
 
-# Ultralytics 설정 초기화
+# 설정 초기화 코드 수정
 try:
     settings.reset()
 except Exception as e:
     print(f"Ultralytics 설정 초기화 중 오류: {e}")
-    
-torch.classes._path = None  # 경로 문제 회피
 
 def extract_keypoints_from_video(video_path, model):
     cap = cv2.VideoCapture(video_path)
