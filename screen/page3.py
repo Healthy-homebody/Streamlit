@@ -17,7 +17,7 @@ from dtaidistance import dtw
 from models.gpt import get_advice_based_on_similarity
 
 # 환경 변수 처리
-os.environ.pop('QT_QPA_PLATFORM', None)
+os.environ["QT_QPA_PLATFORM"] = "offscreen"
 
 if 'QT_QPA_PLATFORM' in os.environ: # Qt 설정 제거
     os.environ.pop('QT_QPA_PLATFORM')
