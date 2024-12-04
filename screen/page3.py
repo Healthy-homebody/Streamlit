@@ -82,6 +82,7 @@ def show():
     model = YOLO('yolov8m-pose.pt', verbose=False)
 
     # 동작 설명 비디오 처리
+    description_video_path = None
     if 'selected_action' in st.session_state:
         st.subheader("동작 설명 비디오")
 
@@ -97,13 +98,12 @@ def show():
             description_video_path = video_path  # 설명 비디오 경로 저장
         else:
             st.write("비디오 파일을 찾을 수 없습니다.")
-            description_video_path = None  # 비디오 경로가 없으면 None으로 설정
     else:
         st.subheader("동작 설명 비디오")
         st.write("비디오가 없습니다.")
-        description_video_path = None
 
     # 사용자 업로드 비디오 처리
+    uploaded_video_path = None
     if 'uploaded_video' in st.session_state:
         st.subheader("사용자 업로드 비디오")
         st.video(st.session_state.uploaded_video)
@@ -111,59 +111,56 @@ def show():
     else:
         st.subheader("사용자 업로드 비디오")
         st.write("업로드된 동영상이 없습니다.")
-        uploaded_video_path = None
 
-# 동작 유사도 측정 버튼
-if description_video_path and uploaded_video_path:
-    col1, col2 = st.columns(2)  # 두 개의 열 생성
+    # 동작 유사도 측정 버튼
+    if description_video_path and uploaded_video_path:
+        col1, col2 = st.columns(2)  # 두 개의 열 생성
 
-    with col1:
-        if st.button("동작 유사도 측정"):
-            try:
-                # 동작 유사도 측정 중이라는 메시지 표시
-                with st.spinner('동작 유사도 측정 중...'):
-                    # 키포인트 및 프레임 추출
-                    keypoints_list, original_frames, processed_frames = extract_keypoints_from_video(uploaded_video_path, model)
+        with col1:
+            if st.button("동작 유사도 측정"):
+                try:
+                    # 동작 유사도 측정 중이라는 메시지 표시
+                    with st.spinner('동작 유사도 측정 중...'):
+                        # 키포인트 및 프레임 추출
+                        keypoints_list, original_frames, processed_frames = extract_keypoints_from_video(uploaded_video_path, model)
 
-                    # 처리된 프레임 미리보기 (선택적)
-                    st.subheader("처리된 프레임 미리보기")
-                    if processed_frames:
-                        # 처음 몇 프레임만 보여주기
-                        preview_frames = processed_frames[:5]
-                        preview_images = [cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) for frame in preview_frames]
+                        # 처리된 프레임 미리보기 (선택적)
+                        st.subheader("처리된 프레임 미리보기")
+                        if processed_frames:
+                            # 처음 몇 프레임만 보여주기
+                            preview_frames = processed_frames[:5]
+                            preview_images = [cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) for frame in preview_frames]
 
-                        # 프레임들을 가로로 나란히 표시
-                        cols = st.columns(len(preview_images))
-                        for col, img in zip(cols, preview_images):
-                            col.image(img, use_column_width=True)
+                            # 프레임들을 가로로 나란히 표시
+                            cols = st.columns(len(preview_images))
+                            for col, img in zip(cols, preview_images):
+                                col.image(img, use_column_width=True)
 
-                    # DTW 거리 측정
-                    dtw_distance = compare_videos(description_video_path, uploaded_video_path, model=model)
-                    st.session_state.dtw_distance = dtw_distance  # 측정 결과 저장
-                    st.session_state.similarity_measured = True  # 유사도 측정 완료 표시
+                        # DTW 거리 측정
+                        dtw_distance = compare_videos(description_video_path, uploaded_video_path, model=model)
+                        st.session_state.dtw_distance = dtw_distance  # 측정 결과 저장
+                        st.session_state.similarity_measured = True  # 유사도 측정 완료 표시
 
-                st.success('유사도 측정 완료!')
-                st.write(f"동작 유사도 측정 결과 : {dtw_distance}")  # DTW 거리 출력
+                    st.success('유사도 측정 완료!')
+                    st.write(f"동작 유사도 측정 결과 : {dtw_distance}")  # DTW 거리 출력
 
-                with st.spinner('동작에 대한 피드백 생성 중...'):
-                    advice = get_advice_based_on_similarity(dtw_distance, st.session_state.selected_action)
-                    st.session_state.advice = advice  # 조언 저장
-                    st.write(f"GPT-4 조언: {advice}")  # GPT-4 조언 출력
+                    with st.spinner('동작에 대한 피드백 생성 중...'):
+                        advice = get_advice_based_on_similarity(dtw_distance, st.session_state.selected_action)
+                        st.session_state.advice = advice  # 조언 저장
+                        st.write(f"GPT-4 조언: {advice}")  # GPT-4 조언 출력
 
-            except Exception as e:
-                # 예기치 않은 에러 처리
-                st.error(f"동작 유사도 측정 중 알 수 없는 에러가 발생했습니다: {e}")
-                raise  # 상세 디버깅을 위해 예외를 다시 던짐
+                except Exception as e:
+                    # 예기치 않은 에러 처리
+                    st.error(f"동작 유사도 측정 중 알 수 없는 에러가 발생했습니다: {e}")
+                    raise  # 상세 디버깅을 위해 예외를 다시 던짐
 
-    with col2:
-        # 동작 유사도 측정이 완료된 경우에만 다음 버튼 활성화
-        if st.session_state.similarity_measured and st.button("다음", key="next"):
-            st.session_state.selected_page = "recommendation"
+        with col2:
+            # 동작 유사도 측정이 완료된 경우에만 다음 버튼 활성화
+            if st.session_state.similarity_measured and st.button("다음", key="next"):
+                st.session_state.selected_page = "recommendation"
 
-else:
-    st.write("비디오를 선택하거나 업로드해 주세요.")
-
-
+    else:
+        st.write("비디오를 선택하거나 업로드해 주세요.")
 
         
         
