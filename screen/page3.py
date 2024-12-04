@@ -7,19 +7,21 @@ import tempfile
 import mimetypes
 import warnings
 import torch
+import concurrent.futures
+
+# 시스템 경로 추가
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from ultralytics import YOLO, settings
 from models.DTWEX import compare_videos
+from dtaidistance import dtw
 from models.gpt import get_advice_based_on_similarity
 
 # 환경 변수 및 경고 설정
 os.environ["QT_QPA_PLATFORM"] = "offscreen"
 warnings.filterwarnings("ignore")
 
-try:
-    delattr(torch.classes, '_path')
-except AttributeError:
-    pass
-
+# Ultralytics 로깅 설정
 try:
     from ultralytics.yolo.utils import LOGGER
     LOGGER.setLevel("WARNING")
@@ -27,12 +29,12 @@ try:
 except Exception as e:
     print(f"Ultralytics 설정 초기화 중 오류: {e}")
 
-# YOLO 모델 로드 함수 (리소스 캐싱)
+# 모델 캐싱
 @st.cache_resource
 def load_yolo_model():
     return YOLO('yolov8m-pose.pt', verbose=False)
 
-# 비디오 키포인트 추출 (데이터 캐싱)
+# 비디오 전처리 및 키포인트 추출 최적화
 @st.cache_data
 def extract_keypoints_from_video(_video_path, _model):
     cap = cv2.VideoCapture(_video_path)
@@ -49,10 +51,9 @@ def extract_keypoints_from_video(_video_path, _model):
         if not ret:
             break
 
-        # 프레임 크기 조정
+        # 프레임 크기 조정 (성능 최적화)
         frame = cv2.resize(frame, (640, 480))
-        
-        # YOLO 모델 적용
+
         results = _model(frame, verbose=False)
         keypoints = results[0].keypoints.cpu().numpy() if results[0].keypoints is not None else None
 
@@ -65,18 +66,23 @@ def extract_keypoints_from_video(_video_path, _model):
     cap.release()
     return keypoints_list, frames, processed_frames
 
-# 비디오 비교 함수
-def process_video_async(description_video_path, uploaded_video_path, _model):
-    try:
-        # 키포인트 추출
-        keypoints_list, _, processed_frames = extract_keypoints_from_video(uploaded_video_path, _model)
-
-        # DTW 거리 계산
-        dtw_distance = compare_videos(description_video_path, uploaded_video_path, model=_model)
-
+# 비동기 비디오 처리 함수
+@st.cache_data
+def process_video_async(description_video_path, uploaded_video_path, model):
+    def compute_similarity():
+        # 키포인트 및 프레임 추출
+        keypoints_list, original_frames, processed_frames = extract_keypoints_from_video(uploaded_video_path, model)
+        
+        # DTW 거리 측정
+        dtw_distance = compare_videos(description_video_path, uploaded_video_path, model=model)
+        
         # 조언 생성
         advice = get_advice_based_on_similarity(dtw_distance, st.session_state.selected_action)
+        
+        return dtw_distance, advice, processed_frames
 
+    try:
+        dtw_distance, advice, processed_frames = compute_similarity()
         return dtw_distance, advice, processed_frames
     except Exception as e:
         st.error(f"분석 중 오류 발생: {e}")
