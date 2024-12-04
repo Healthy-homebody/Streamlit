@@ -68,13 +68,13 @@ def extract_keypoints_from_video(_video_path, _model):
 
 # 비동기 비디오 처리 함수
 @st.cache_data
-def process_video_async(description_video_path, uploaded_video_path, model):
+def process_video_async(description_video_path, uploaded_video_path, _model):
     def compute_similarity():
         # 키포인트 및 프레임 추출
-        keypoints_list, original_frames, processed_frames = extract_keypoints_from_video(uploaded_video_path, model)
+        keypoints_list, original_frames, processed_frames = extract_keypoints_from_video(uploaded_video_path, _model)
         
         # DTW 거리 측정
-        dtw_distance = compare_videos(description_video_path, uploaded_video_path, model=model)
+        dtw_distance = compare_videos(description_video_path, uploaded_video_path, model=_model)
         
         # 조언 생성
         advice = get_advice_based_on_similarity(dtw_distance, st.session_state.selected_action)
