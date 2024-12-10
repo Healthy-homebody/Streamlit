@@ -33,6 +33,8 @@ import page1
 import page2
 import page3
 import recommendation
+import dtw_test
+import openai
 
 # 세션 상태에서 선택된 페이지를  <sp저장할 수 있도록 초기화
 if 'selected_page' not in st.session_state:
@@ -41,8 +43,8 @@ if 'selected_page' not in st.session_state:
 # 사이드바
 page = st.sidebar.selectbox(
     "페이지를 선택하세요", 
-    ["main", "page1", "page2", "page3", "recommendation"],
-    index=["main", "page1", "page2", "page3", "recommendation"].index(st.session_state.selected_page)
+    ["main", "page1", "page2", "page3", "recommendation", "dtw_test", "openai"],
+    index=["main", "page1", "page2", "page3", "recommendation", "dtw_test", "openai"].index(st.session_state.selected_page)
 )
 
 # 메인 페이지
@@ -105,3 +107,7 @@ elif page == "page3":
     page3.show()
 elif page == "recommendation":
     recommendation.show()
+elif page == "dtw_test":
+    dtw_test.compare_videos()
+elif page == "openai":
+    openai.get_advice_based_on_similarity()
