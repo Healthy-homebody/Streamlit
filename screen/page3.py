@@ -18,8 +18,8 @@ from models.gpt import get_advice_based_on_similarity
 
 # 경고 메시지 숨기기
 # st.set_option('deprecation.showPyplotGlobalUse', False)
-st.set_option('deprecation.showfileUploaderEncoding', False)
-st.set_option('deprecation.showImageFormat', False)  # 이미지 관련 경고 메시지 숨기기
+# st.set_option('deprecation.showfileUploaderEncoding', False)
+# st.set_option('deprecation.showImageFormat', False)  # 이미지 관련 경고 메시지 숨기기
 
 # .env 파일 로드
 load_dotenv()
