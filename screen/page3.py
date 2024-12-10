@@ -7,6 +7,8 @@ import tempfile  # 임시 파일을 저장하기 위해 사용
 import mimetypes
 from dotenv import load_dotenv
 import openai
+import logging
+import asyncio
 
 # 시스템 경로 추가
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -23,6 +25,21 @@ from models.gpt import get_advice_based_on_similarity
 
 # .env 파일 로드
 load_dotenv()
+
+# 로그 설정
+logging.basicConfig(
+    level=logging.DEBUG,  # 필요한 로그 수준 설정
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.FileHandler("app.log"),  # 로그를 파일에 저장
+        logging.StreamHandler()  # 터미널에도 출력
+    ]
+)
+
+async def long_running_task():
+    # 시간이 오래 걸리는 작업을 비동기로 처리
+    await asyncio.sleep(5)
+    return "작업 완료"
 
 # OpenAI API 키 설정
 api_key = os.getenv("OPENAI_API_KEY")
@@ -68,7 +85,7 @@ def show():
     st.write("여기는 동작 비교 페이지입니다.")
 
     # YOLO 모델 로드
-    model = YOLO('yolov8n-pose.pt')
+    model = YOLO('yolov8m-pose.pt')
 
     # 동작 설명 비디오 처리
     if 'selected_action' in st.session_state:
@@ -132,7 +149,6 @@ def show():
 
                 st.success('유사도 측정 완료!')
                 st.write(f"동작 유사도 측정 결과 : {dtw_distance}")  # DTW 거리 출력
-
                 with st.spinner('동작에 대한 피드백 생성 중...'):
                     advice = get_advice_based_on_similarity(dtw_distance, st.session_state.selected_action)
                     st.session_state.advice = advice  # 조언 저장
