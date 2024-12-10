@@ -145,7 +145,7 @@ def show():
             if st.button("동작 유사도 측정"):
                 try:
                     with st.spinner('동작 유사도 측정 중...'):
-                        console.log("키포인트 및 프레임 추출 시작")
+                        print("키포인트 및 프레임 추출 시작")
                         # 키포인트 및 프레임 추출
                         keypoints_list, processed_frames = extract_keypoints_from_video(uploaded_video_path, model)
                         
@@ -165,7 +165,7 @@ def show():
                         st.write(f"동작 유사도 측정 결과: {dtw_distance}")
                         
                         with st.spinner('동작에 대한 피드백 생성 중...'):
-                            console.log("동작 피드백 생성 시작")
+                            print("동작 피드백 생성 시작")
                             advice = get_advice_based_on_similarity(dtw_distance, st.session_state.selected_action)
                             st.session_state.advice = advice
                             st.write(f"GPT-4 조언: {advice}")
