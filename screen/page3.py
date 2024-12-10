@@ -40,26 +40,37 @@ def extract_keypoints_from_video(video_path, model):
     비디오에서 키포인트를 안전하게 추출하는 함수 (Streamlit 친화적 버전)
     """
     try:
+        # 기존 코드와 동일하게 유지
         keypoints_list = []
         processed_frames = []
 
         with st.spinner('키포인트 추출 중...'):
-            # Results 객체 직접 사용
-            results = model(video_path, stream=True, verbose=False)
+            # 추가적인 에러 핸들링
+            try:
+                results = model(video_path, stream=True, verbose=False)
+            except Exception as model_error:
+                st.error(f"모델 처리 중 오류: {model_error}")
+                logging.error(f"모델 처리 오류: {model_error}")
+                return None, None
             
             for result in results:
-                if result.keypoints is not None:
-                    keypoints = result.keypoints.cpu().numpy()
-                    keypoints_list.append(keypoints)
-                    
-                    # PIL Image로 변환하여 Streamlit에 호환되게 처리
-                    rendered_frame = result.plot()
-                    pil_image = Image.fromarray(rendered_frame[:, :, ::-1])
-                    processed_frames.append(pil_image)
-                    
-                    # 메모리 관리를 위해 5개의 프레임만 저장
-                    if len(processed_frames) > 5:
-                        processed_frames = processed_frames[-5:]
+                try:
+                    if result.keypoints is not None:
+                        keypoints = result.keypoints.cpu().numpy()
+                        keypoints_list.append(keypoints)
+                        
+                        # PIL Image로 변환하여 Streamlit에 호환되게 처리
+                        rendered_frame = result.plot()
+                        pil_image = Image.fromarray(rendered_frame[:, :, ::-1])
+                        processed_frames.append(pil_image)
+                        
+                        # 메모리 관리를 위해 5개의 프레임만 저장
+                        if len(processed_frames) > 5:
+                            processed_frames = processed_frames[-5:]
+                
+                except Exception as frame_error:
+                    st.warning(f"프레임 처리 중 부분적 오류: {frame_error}")
+                    logging.warning(f"프레임 처리 부분 오류: {frame_error}")
 
         return keypoints_list, processed_frames
     
@@ -134,6 +145,7 @@ def show():
             if st.button("동작 유사도 측정"):
                 try:
                     with st.spinner('동작 유사도 측정 중...'):
+                        console.log("키포인트 및 프레임 추출 시작")
                         # 키포인트 및 프레임 추출
                         keypoints_list, processed_frames = extract_keypoints_from_video(uploaded_video_path, model)
                         
@@ -153,6 +165,7 @@ def show():
                         st.write(f"동작 유사도 측정 결과: {dtw_distance}")
                         
                         with st.spinner('동작에 대한 피드백 생성 중...'):
+                            console.log("동작 피드백 생성 시작")
                             advice = get_advice_based_on_similarity(dtw_distance, st.session_state.selected_action)
                             st.session_state.advice = advice
                             st.write(f"GPT-4 조언: {advice}")
